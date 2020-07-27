@@ -1,8 +1,7 @@
 require("dotenv").config();
-
 const nodemailer = require("nodemailer");
-
 const fs = require("fs");
+var CronJob = require("cron").CronJob;
 
 const port = 587;
 
@@ -60,4 +59,16 @@ async function main() {
   console.log("Message sent: %s", info.messageId);
 }
 
-main().catch(console.error);
+var job = new CronJob(
+  "0 0 7 * * *",
+  function () {
+    main().catch(console.error);
+  },
+  null,
+  true,
+  "Europe/Stockholm"
+);
+
+job.start();
+
+console.log("Aaaand we have liftoff");
